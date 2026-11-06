@@ -1,7 +1,18 @@
 import Link from 'next/link';
-import { Cta, SecHead } from '@/app/components/Parts';
+import { Cta, More, MoreLink, SecHead } from '@/app/components/Parts';
 import { NewsFeed, WorksFeed } from '@/app/components/Posts';
-import { businessClosing, businessDetails, businessIntro, flow, services } from '@/app/lib/content';
+import { businessClosing, businessDetails, businessIntro, safetyPoints, services } from '@/app/lib/content';
+
+const ICONS = {
+  check: (
+    <>
+      <rect x="6" y="5" width="20" height="23" />
+      <path d="M12 3h8v5h-8zM11 17l4 4 7-8" />
+    </>
+  ),
+  helmet: <path d="M3 23h26M6 23v-3a10 10 0 0 1 20 0v3M13 10.5V7h6v3.5" />,
+  dust: <path d="M3 11c4-4 7 4 11 0s7 4 11 0M3 18c4-4 7 4 11 0s7 4 11 0M3 25c4-4 7 4 11 0s7 4 11 0" />,
+};
 
 export default function Home() {
   return (
@@ -47,9 +58,7 @@ export default function Home() {
             <div>
               <SecHead en="NEWS" title="お知らせ" />
             </div>
-            <Link className="btn" href="/news">
-              お知らせ一覧
-            </Link>
+            <MoreLink href="/news/" label="お知らせ一覧へ" />
           </div>
           <NewsFeed limit={4} />
         </div>
@@ -64,11 +73,14 @@ export default function Home() {
             </div>
             <img className="reveal" src="/img/gen-sorting.jpg" alt="材質ごとに分別された廃材（イメージ）" loading="lazy" />
           </div>
-          <ul className="service-grid" style={{ marginTop: 56 }}>
+          <ul className="service-cards">
             {services.map((s) => (
               <li key={s.title}>
-                <small>{s.en}</small>
-                <strong>{s.title}</strong>
+                <img src={s.image} alt={`${s.title}（イメージ）`} loading="lazy" />
+                <div>
+                  <small>{s.en}</small>
+                  <strong>{s.title}</strong>
+                </div>
               </li>
             ))}
           </ul>
@@ -80,50 +92,53 @@ export default function Home() {
               </article>
             ))}
           </div>
-          <ol className="flow">
-            {flow.map((f) => (
-              <li key={f}>{f}</li>
-            ))}
-          </ol>
           <p className="lead">{businessClosing}</p>
-          <Link className="arrow-link" href="/strength">
+          <Link className="arrow-link" href="/strength/">
             <span className="eyebrow">OUR STRENGTH</span>
             <strong>山﨑工業の5つの強み</strong>
-            <span className="arrow-more">もっと見る</span>
-            <span className="arrow" aria-hidden="true">
-              →
-            </span>
+            <More />
           </Link>
         </div>
       </section>
 
-      <section className="band">
-        <img src="/img/gen-chisel.jpg" alt="" loading="lazy" />
-        <div className="wrap">
-          <span className="eyebrow">SAFETY FIRST</span>
-          <p className="quote">
-            ケガなく、全員が
-            <br />
-            元気に家へ帰る。
-          </p>
-          <p className="sub">私たちが仕事をするうえで、何より大切にしていることです。</p>
-          <p style={{ marginTop: 32 }}>
-            <Link className="btn" href="/about">
-              代表メッセージを読む
-            </Link>
-          </p>
+      <section className="safety">
+        <div className="safety-photo reveal">
+          <img src="/img/gen-safety.jpg" alt="ヘルメットを整える職人（イメージ）" loading="lazy" />
+        </div>
+        <div className="safety-body">
+          <SecHead
+            en="SAFETY FIRST"
+            title={
+              <>
+                ケガなく、全員が
+                <br />
+                元気に家へ帰る。
+              </>
+            }
+          />
+          <p className="lead">私たちが仕事をするうえで、何より大切にしていることです。</p>
+          <ul className="safety-points">
+            {safetyPoints.map((p) => (
+              <li key={p.title}>
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  {ICONS[p.icon]}
+                </svg>
+                <div>
+                  <strong>{p.title}</strong>
+                  <p>{p.body}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <MoreLink href="/about/" label="代表メッセージを読む" />
         </div>
       </section>
 
-      <section className="section">
-        <div className="wrap">
-          <div className="head-row">
-            <div>
-              <SecHead en="WORKS" title="施工例" />
-            </div>
-            <Link className="btn" href="/works">
-              施工例をもっと見る
-            </Link>
+      <section className="section char">
+        <div className="wrap works-split">
+          <div>
+            <SecHead en="WORKS" title="施工例" />
+            <MoreLink href="/works/" label="施工例一覧へ" />
           </div>
           <WorksFeed limit={3} />
         </div>

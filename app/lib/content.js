@@ -38,12 +38,19 @@ export const businessIntro =
   '株式会社山﨑工業では、内装解体工事を中心として原状回復工事、スケルトン工事、部分改修工事、斫り工事、石綿関連工事まで幅広く対応しております。';
 
 export const services = [
-  { title: '内装解体工事', en: 'INTERIOR DEMOLITION' },
-  { title: '原状回復工事', en: 'RESTORATION' },
-  { title: 'スケルトン工事', en: 'SKELETON' },
-  { title: '部分改修工事', en: 'PARTIAL RENOVATION' },
-  { title: '斫り工事', en: 'CHIPPING' },
-  { title: '石綿関連工事', en: 'ASBESTOS' },
+  { title: '内装解体工事', en: 'INTERIOR DEMOLITION', image: '/img/gen-svc-interior.jpg' },
+  { title: '原状回復工事', en: 'RESTORATION', image: '/img/gen-svc-restore.jpg' },
+  { title: 'スケルトン工事', en: 'SKELETON', image: '/img/gen-svc-skeleton.jpg' },
+  { title: '部分改修工事', en: 'PARTIAL RENOVATION', image: '/img/gen-svc-partial.jpg' },
+  { title: '斫り工事', en: 'CHIPPING', image: '/img/gen-chisel.jpg' },
+  { title: '石綿関連工事', en: 'ASBESTOS', image: '/img/gen-svc-asbestos.jpg' },
+];
+
+// 原稿「安全管理と細かな現場報告」から
+export const safetyPoints = [
+  { icon: 'check', title: 'KY活動', body: '毎朝・昼にKY活動を行い、その日の作業内容と人員配置を確認したうえで作業を開始します。' },
+  { icon: 'helmet', title: '保護具の着用', body: '保護具の着用を徹底しています。' },
+  { icon: 'dust', title: '騒音・粉じん対策', body: '騒音・粉じん対策を含め、安全第一で施工を進めています。' },
 ];
 
 export const businessDetails = [
@@ -64,8 +71,6 @@ export const businessDetails = [
     body: '対応エリアは、東京都・埼玉県・千葉県・神奈川県の一都三県です。',
   },
 ];
-
-export const flow = ['現地調査', '見積', '養生', '解体', '分別', '搬出', '産業廃棄物処理の手配'];
 
 export const businessClosing =
   '山﨑工業では、施工そのものだけでなく、工事前の近隣へのご挨拶や丁寧な対応を大切にしており、完工時だけでなく、施工中も常に整理整頓された現場づくりを徹底しています。';

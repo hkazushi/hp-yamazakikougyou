@@ -24,6 +24,24 @@ export function SecHead({ en, title }) {
   );
 }
 
+// ホバーで文字間隔が広がり、線が伸びる。スマホでも最初から見える
+export function More() {
+  return (
+    <span className="more">
+      <span>MORE</span>
+      <i aria-hidden="true" />
+    </span>
+  );
+}
+
+export function MoreLink({ href, label }) {
+  return (
+    <Link className="more-link" href={href} aria-label={label}>
+      <More />
+    </Link>
+  );
+}
+
 export function WorkGrid({ posts }) {
   if (!posts.length) return <p className="empty">施工例は準備中です。</p>;
   return (
