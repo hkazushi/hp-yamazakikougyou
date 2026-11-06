@@ -221,7 +221,9 @@ main.home { padding-top: 0; }
 .motion .reveal.in, .motion .strength-row.flip .reveal.in { clip-path: inset(0); }
 .arrow-link { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: 48px; padding: 28px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: color 0.2s; }
 .arrow-link strong { font-family: var(--mincho); font-size: clamp(22px, 3vw, 32px); font-weight: 700; }
-.arrow-link .arrow { margin-left: auto; color: var(--gold); font-size: 32px; transition: transform 0.2s; }
+.arrow-link .arrow-more { margin-left: auto; color: var(--gold); font-size: 14px; font-weight: 700; }
+.arrow-link .arrow { color: var(--gold); font-size: 32px; transition: transform 0.2s; }
+#business { scroll-margin-top: var(--header); }
 .arrow-link:hover { color: var(--gold); }
 .arrow-link:hover .arrow { transform: translateX(8px); }
 .flow + .lead { margin-top: 32px; }

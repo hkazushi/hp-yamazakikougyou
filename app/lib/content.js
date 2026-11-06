@@ -12,6 +12,7 @@ export const company = {
 
 export const nav = [
   { href: '/about', label: '企業情報', en: 'COMPANY' },
+  { href: '/#business', label: '事業内容', en: 'BUSINESS' },
   { href: '/strength', label: '会社の強み', en: 'STRENGTH' },
   { href: '/works', label: '施工例', en: 'WORKS' },
   { href: '/news', label: 'お知らせ', en: 'NEWS' },
@@ -48,11 +49,11 @@ export const services = [
 export const businessDetails = [
   {
     heading: '対応物件',
-    body: 'マンション、オフィス、店舗、商業施設、学校、病院、工場など。マンション一棟規模の工事から、一室のみの部分解体、小規模店舗、大型施設まで柔軟に対応可能です。',
+    body: '対応物件は、マンション、オフィス、店舗、商業施設、学校、病院、工場など。マンション一棟規模の工事から、一室のみの部分解体、小規模店舗、大型施設まで柔軟に対応可能です。',
   },
   {
     heading: '主な施工内容',
-    body: '店舗の原状回復からマンション住宅のスケルトン工事、リノベーションに伴う部分解体、石綿撤去工事などです。',
+    body: '主な施工内容は店舗の原状回復からマンション住宅のスケルトン工事、リノベーションに伴う部分解体、石綿撤去工事などです。',
   },
   {
     heading: '一貫対応',
@@ -60,7 +61,7 @@ export const businessDetails = [
   },
   {
     heading: '対応エリア',
-    body: '東京都・埼玉県・千葉県・神奈川県の一都三県です。',
+    body: '対応エリアは、東京都・埼玉県・千葉県・神奈川県の一都三県です。',
   },
 ];
 

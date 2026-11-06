@@ -55,7 +55,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section" id="business">
         <div className="wrap">
           <div className="photo-text">
             <div>
@@ -89,6 +89,7 @@ export default function Home() {
           <Link className="arrow-link" href="/strength">
             <span className="eyebrow">OUR STRENGTH</span>
             <strong>山﨑工業の5つの強み</strong>
+            <span className="arrow-more">もっと見る</span>
             <span className="arrow" aria-hidden="true">
               →
             </span>
