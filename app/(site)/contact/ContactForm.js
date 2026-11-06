@@ -1,20 +1,33 @@
 'use client';
 
 import Link from 'next/link';
-import { startTransition, useActionState } from 'react';
-import { contactAction } from '@/app/lib/actions';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { api } from '@/app/lib/api';
+import { REVIEW } from '@/app/lib/api-error';
 
-export default function ContactForm({ kinds, initialKind }) {
-  const [state, action, pending] = useActionState(contactAction, {});
+export default function ContactForm({ kinds }) {
+  const initialKind = useSearchParams().get('kind') === 'recruit' ? '求人への応募' : '';
+  const [pending, setPending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState('');
 
-  // form の action 属性に渡すと、エラー時も入力が消えてしまうので onSubmit から呼ぶ
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    startTransition(() => action(data));
+    const data = Object.fromEntries(new FormData(e.currentTarget));
+    setPending(true);
+    setError('');
+    try {
+      await api('contact', { body: { ...data, agree: data.agree === 'on' } });
+      setDone(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setPending(false);
+    }
   }
 
-  if (state.ok) {
+  if (done) {
     return (
       <div className="form-done" role="status">
         <h2>送信が完了しました</h2>
@@ -25,6 +38,11 @@ export default function ContactForm({ kinds, initialKind }) {
 
   return (
     <form onSubmit={submit}>
+      {REVIEW && (
+        <p className="form-error" role="note">
+          確認用の画面のため、送信しても会社には届きません。ご連絡はお電話でお願いします。
+        </p>
+      )}
       <label className="field">
         <span>
           お問い合わせ種別<span className="req">必須</span>
@@ -73,15 +91,15 @@ export default function ContactForm({ kinds, initialKind }) {
       <label className="check">
         <input type="checkbox" name="agree" required />
         <span>
-          <Link href="/privacy" target="_blank">
+          <Link href="/privacy/" target="_blank">
             プライバシーポリシー
           </Link>
           に同意する
         </span>
       </label>
-      {state.error && (
+      {error && (
         <p className="form-error" role="alert">
-          {state.error}
+          {error}
         </p>
       )}
       <div className="form-actions">

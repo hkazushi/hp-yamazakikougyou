@@ -23,6 +23,8 @@ export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: { default: '株式会社山﨑工業｜内装解体工事', template: '%s｜株式会社山﨑工業' },
   description,
+  // 確認用ビルドは検索結果に出さない
+  ...(process.env.NEXT_PUBLIC_REVIEW === '1' ? { robots: { index: false, follow: false } } : {}),
   openGraph: {
     title: '株式会社山﨑工業｜内装解体工事',
     description,

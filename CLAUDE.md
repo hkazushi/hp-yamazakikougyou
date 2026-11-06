@@ -3,30 +3,48 @@
 東京都足立区の内装解体業者のコーポレートサイト。施工例とお知らせは、お客さんが `/admin` から自分で投稿する。2026-11-06 新規作成。
 
 参考サイト: https://honma-kaitai.co.jp/ （雰囲気のみ。文言・素材は流用しない）
+GitHub: https://github.com/hkazushi/hp-yamazakikougyou （**Public**）
 
 ## 技術構成
 
-- Next.js（App Router）+ **JavaScript**（`jsconfig.json`）。サーバーで動かす（静的エクスポートではない）
-- 保存先: **Supabase**（Postgres + Storage）。環境変数が無ければ `.data/` のファイルに保存（ローカル確認用）
-- ログイン: `ADMIN_USER` / `ADMIN_PASSWORD` の1アカウント + 署名付き Cookie（`app/lib/auth.js`）
-- お問い合わせ: 保存して `/admin/inquiries` に表示。`RESEND_API_KEY` 等があれば通知メールも送る
-- GitHub: https://github.com/hkazushi/hp-yamazakikougyou （**Public**）
-- 公開先は Vercel 想定（`.data/` は Vercel では書き込めないので本番は Supabase 必須）
+- 公開先は**レンタルサーバー想定（未契約）**。条件は PHP 7.4 以上（`mbstring` 有効）と Apache 2.4 互換の `.htaccess`
+- 画面: Next.js（App Router）+ **JavaScript** の**静的エクスポート**（`output: 'export'` / `trailingSlash: true`）
+- 投稿・ログイン・お問い合わせ: **PHP**（`public/api/`）。**データベースは使わない**
+- 保存先: 公開フォルダの外の `yk-data/`（`public_html` の隣）。デプロイで上書きしても消えない
+- ログイン: `yk-data/config.php` の1アカウント + PHP セッション
+- **確認用（Vercel）**: https://hp-yamazakikougyou.vercel.app 。`main` への push で自動デプロイ。PHP が動かないので、`next.config.mjs` が自動で `NEXT_PUBLIC_REVIEW=1` にして `app/lib/review.js` で動く。**ログイン不要、編集内容は見ている人のブラウザ（localStorage）にだけ保存**、noindex、問い合わせは届かない。本番ビルド（環境変数なし）には入らない
 
 ### ディレクトリ
 
 | パス | 役割 |
 |---|---|
 | `app/lib/content.js` | サイトの文言。**文言の修正はまずここ** |
-| `app/lib/store.js` | 投稿・問い合わせ・画像の保存（Supabase / ファイルの切り替え） |
-| `app/lib/actions.js` | Server Actions。管理系は必ず `requireAdmin()` を先頭で呼ぶ |
-| `app/lib/samples.js` | ローカル用の初期データ（Supabase 接続時は使わない） |
-| `app/(site)/` | 公開ページ（`/about`=メッセージ+会社概要 `/strength` `/works` `/news` `/recruit` `/contact` `/privacy`。事業内容はトップ内） |
-| `meetings/` `notes/` | 打ち合わせ記録と内部メモ。**Public リポジトリなので `.gitignore` 済み（ローカルのみ）** |
-| `app/admin/` | 管理画面（`/admin` `/admin/login` `/admin/posts/*` `/admin/inquiries`） |
+| `app/lib/api.js` | PHP API の呼び出し |
+| `app/components/Posts.js` | 施工例・お知らせの読み込み（ブラウザから API を呼ぶ） |
+| `app/(site)/` | 公開ページ（`/about`=メッセージ+会社概要 `/strength` `/works` `/news` `/news/detail/?id=` `/recruit` `/contact` `/privacy`。事業内容はトップ内） |
+| `app/admin/` | 管理画面の見た目。権限チェックは PHP 側で毎回行う |
+| `public/api/index.php` | API 本体（`?action=`） |
+| `public/api/lib.php` | 保存（ファイルロック + rename）、セッション、回数制限、通知メール |
+| `public/api/image.php` | `yk-data/uploads/` の画像を配信 |
+| `deploy/config.sample.php` | `yk-data/config.php` の雛形 |
 | `app/globals.css` | 全スタイル（1ファイル。後半が管理画面） |
-| `supabase/schema.sql` | Supabase の SQL エディタで手動実行 |
-| `notes/` | 文言の出典、仮写真のライセンス、掲載前の確認事項、意思決定 |
+| `meetings/` `notes/` | 打ち合わせ記録と内部メモ。**Public リポジトリなので `.gitignore` 済み（ローカルのみ）** |
+
+### サーバー上の配置
+
+```text
+（ドメインのフォルダ）/
+├ public_html/      ← out/ の中身（.htaccess も含める）
+└ yk-data/          ← 自動作成。手で置くのは config.php だけ
+   ├ config.php     ログインID、パスワードのハッシュ、通知先
+   ├ posts.json     施工例・お知らせ
+   ├ inquiries.json お問い合わせ（個人情報）
+   ├ uploads/       アップロード画像
+   ├ sessions/      ログインセッション
+   └ rate.json      回数制限の記録
+```
+
+`public_html` の隣に置けないサーバーでは、環境変数 `YK_DATA_DIR` で場所を指定する。
 
 ---
 
@@ -37,11 +55,32 @@ npm run build
 npm audit --omit=dev
 ```
 
-TypeScript も lint も無いので、検証はビルドと実表示。`comvace-work/.claude/launch.json` の `yamazaki-kougyo`（`next start` / http://localhost:4320）で確認する。**ビルドし直したらサーバーも再起動する**。
+TypeScript も lint も無いので、検証はビルドと実表示。`next dev` では PHP が動かないので、**`out/` を Apache + PHP で確認する**: `comvace-work/.claude/launch.json` の `yamazaki-kougyo`（Docker の `php:8.3-apache` / http://localhost:4320）。データは `yk-data/` を使う。**ビルドしたらコンテナを起動し直す**（`out/` を作り直すとマウントが外れる）。
 
 - 375 / 768 / 1440px で確認する。`document.documentElement.scrollWidth` が画面幅を超えないこと
-- 管理画面を触ったら、ログイン → 投稿 → 公開ページに反映 → 編集 → 削除 → ログアウトを通す
-- ローカルのログイン情報は `.env.local`（テスト用。本番では別の値を使う）
+- 管理画面や API を触ったら、ログイン → 投稿 → 公開ページに反映 → 編集 → 削除 → ログアウトを通す
+- ローカルのログイン情報は `.env.local` の `ADMIN_USER` / `ADMIN_PASSWORD`（テスト用）。`yk-data/config.php` にはそのハッシュが入っている
+- 通知メールはローカルでは送れない。公開先で実送信を確認する
+- API の動作を変えたら `public/api/index.php` と `app/lib/review.js` の両方を直す。確認用は `NEXT_PUBLIC_REVIEW=1 npm run build` して `yamazaki-review-static`（http://localhost:4321）で見る
+
+---
+
+## デプロイ
+
+1. `NEXT_PUBLIC_SITE_URL=https://（本番ドメイン） npm run build`（`NEXT_PUBLIC_REVIEW` を付けない。付けると確認用になる）
+2. `out/` の**中身**を `public_html/` にアップロードする。`.htaccess` は隠しファイルなので FTP ソフトの設定に注意
+3. **初回だけ** `public_html` の隣に `yk-data/` を作り、`deploy/config.sample.php` を `config.php` として置く。パスワードのハッシュは次のコマンドで作る（Docker が必要。コマンド履歴に残るので、終わったら消す）
+
+```bash
+docker run --rm php:8.3-cli php -r 'echo password_hash("ここにパスワード", PASSWORD_DEFAULT), PHP_EOL;'
+```
+
+4. https でログイン、投稿、画像アップロード、お問い合わせの実送信を確認する
+
+- **ドメイン直下かサブドメインに置く**。画像や API は `/img/...` `/api/...` の絶対パスなので、サブディレクトリでは壊れる
+- `yk-data/` はバックアップ対象。サーバーの自動バックアップに含まれるか確認する
+- `posts.json` が無い初回だけ、テスト投稿4件が入る。削除すれば戻らない
+- パスワードの変更は `config.php` のハッシュを書き換える（管理画面からは変更できない）
 
 ---
 
@@ -63,8 +102,7 @@ TypeScript も lint も無いので、検証はビルドと実表示。`comvace-
 ## 過去に実際に踏んだ罠（再発防止）
 
 - **ffmpeg のズーム動画が細かく揺れる（2026-11-06）**: `zoompan` は切り出し位置を整数に丸めるので、ゆっくりズームすると画面がガタつく。入力を `scale=7680:-2` に拡大してから `zoompan`、最後に `scale=1280:720` で縮小する
-
-- **フォームがエラーになると入力が全部消える（2026-11-06）**: React 19 は `<form action={...}>` の完了後にフォームを自動リセットする。ログインの ID やお問い合わせ本文が消える。`onSubmit` で `preventDefault` し `startTransition(() => action(new FormData(form)))` で呼ぶ
+- **フォームがエラーになると入力が全部消える（2026-11-06）**: React 19 は `<form action={...}>` の完了後にフォームを自動リセットする。`onSubmit` で `preventDefault` して API を呼ぶ
 - **Browser pane でスライドが動かないように見える（2026-11-06）**: pane では `requestAnimationFrame` が止まることがあり、スムーズスクロールとスクロールイベントが発火しない。コードの不具合と決めつけず、`scrollLeft` の直接指定か、ヘッドレス Chromium で確認する
 - **Playwright の最新版がインストール済みブラウザを見つけられない（2026-11-06）**: 追加ダウンロードせず `chromium.launch({ executablePath })` で `~/Library/Caches/ms-playwright/chromium-*/` を指定する
 
@@ -72,4 +110,4 @@ TypeScript も lint も無いので、検証はビルドと実表示。`comvace-
 
 ## 秘密情報
 
-`.env*` はコミットしない（`.env.example` のみ可）。`SUPABASE_SERVICE_ROLE_KEY` はサーバー専用で、`NEXT_PUBLIC_` を付けない。
+`.env*` と `yk-data/` はコミットしない（`.env.example` のみ可）。`yk-data/inquiries.json` は個人情報なので、公開領域に置かない。

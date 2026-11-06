@@ -45,7 +45,7 @@ export function NewsList({ posts }) {
     <ul className="news-list">
       {posts.map((p) => (
         <li key={p.id}>
-          <Link href={`/news/${p.id}`}>
+          <Link href={`/news/detail/?id=${p.id}`}>
             <time dateTime={p.date}>{formatDate(p.date)}</time>
             <span className="title">{p.title}</span>
             {p.images[0] ? <img src={p.images[0]} alt="" loading="lazy" /> : <span />}

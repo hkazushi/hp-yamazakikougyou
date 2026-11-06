@@ -1,10 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { savePostAction } from '@/app/lib/actions';
+import { api } from '@/app/lib/api';
 
 const MAX_SIDE = 2000;
+
+const todayJst = () => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(new Date());
 
 // スマホの写真は大きいので、送る前にブラウザで縮小する
 async function shrink(file) {
@@ -16,15 +19,16 @@ async function shrink(file) {
   canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   bitmap.close();
   return new Promise((resolve, reject) => {
-    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('変換失敗'))), 'image/jpeg', 0.85);
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('画像を変換できませんでした。'))), 'image/jpeg', 0.85);
   });
 }
 
-export default function PostForm({ post, type, today }) {
+export default function PostForm({ post, type }) {
+  const router = useRouter();
   const isWork = type === 'work';
   const [title, setTitle] = useState(post?.title ?? '');
   const [body, setBody] = useState(post?.body ?? '');
-  const [date, setDate] = useState(post?.date ?? today);
+  const [date, setDate] = useState(post?.date ?? todayJst());
   const [published, setPublished] = useState(post?.published ?? true);
   const [images, setImages] = useState(post?.images ?? []);
   const [uploading, setUploading] = useState(0);
@@ -38,12 +42,8 @@ export default function PostForm({ post, type, today }) {
     setUploading(files.length);
     for (const file of files) {
       try {
-        const form = new FormData();
-        form.append('file', await shrink(file), 'photo.jpg');
-        const res = await fetch('/api/admin/upload', { method: 'POST', body: form });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.error);
-        setImages((list) => [...list, json.url]);
+        const { url } = await api('upload', { file: await shrink(file) });
+        setImages((list) => [...list, url]);
       } catch (err) {
         setError(`${file.name}: ${err.message || 'アップロードできませんでした。'}`);
       }
@@ -64,15 +64,11 @@ export default function PostForm({ post, type, today }) {
     e.preventDefault();
     setSaving(true);
     setError('');
-    // 成功時はサーバー側で一覧へ移動するので、戻ってくるのはエラーのときだけ
     try {
-      const result = await savePostAction({ id: post?.id, type, title, body, date, published, images });
-      if (result?.error) {
-        setError(result.error);
-        setSaving(false);
-      }
-    } catch {
-      setError('保存できませんでした。時間をおいて、もう一度お試しください。');
+      await api('save_post', { body: { ...(post ? { id: post.id } : {}), type, title, body, date, published, images } });
+      router.push(`/admin/?type=${type}&saved=1`);
+    } catch (err) {
+      setError(err.message);
       setSaving(false);
     }
   }
@@ -130,7 +126,7 @@ export default function PostForm({ post, type, today }) {
         サイトに公開する（外すと下書き）
       </label>
       <div className="a-actions">
-        <Link className="a-btn sub" href={`/admin?type=${type}`}>
+        <Link className="a-btn sub" href={`/admin/?type=${type}`}>
           戻る
         </Link>
         <button className="a-btn" type="submit" disabled={saving || uploading > 0}>

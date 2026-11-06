@@ -1,11 +1,11 @@
+import { Suspense } from 'react';
 import { PageHead } from '@/app/components/Parts';
 import { company, inquiryKinds } from '@/app/lib/content';
 import ContactForm from './ContactForm';
 
 export const metadata = { title: 'お問い合わせ' };
 
-export default async function ContactPage({ searchParams }) {
-  const { kind } = await searchParams;
+export default function ContactPage() {
   return (
     <main>
       <PageHead en="CONTACT" title="お問い合わせ" image="/img/gen-yosei.jpg" />
@@ -19,7 +19,9 @@ export default async function ContactPage({ searchParams }) {
             </div>
             <small>FAX {company.fax}</small>
           </div>
-          <ContactForm kinds={inquiryKinds} initialKind={kind === 'recruit' ? '求人への応募' : ''} />
+          <Suspense fallback={null}>
+            <ContactForm kinds={inquiryKinds} />
+          </Suspense>
         </div>
       </section>
     </main>

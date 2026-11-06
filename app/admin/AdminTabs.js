@@ -1,10 +1,14 @@
-import Link from 'next/link';
+'use client';
 
-export default function AdminTabs({ current, unread = 0 }) {
+import Link from 'next/link';
+import { useAdmin } from './AdminShell';
+
+export default function AdminTabs({ current }) {
+  const { unread } = useAdmin();
   const tabs = [
-    { key: 'work', href: '/admin?type=work', label: '施工例' },
-    { key: 'news', href: '/admin?type=news', label: 'お知らせ' },
-    { key: 'inquiries', href: '/admin/inquiries', label: 'お問合せ' },
+    { key: 'work', href: '/admin/?type=work', label: '施工例' },
+    { key: 'news', href: '/admin/?type=news', label: 'お知らせ' },
+    { key: 'inquiries', href: '/admin/inquiries/', label: 'お問合せ' },
   ];
   return (
     <nav className="a-tabs" aria-label="編集するもの">

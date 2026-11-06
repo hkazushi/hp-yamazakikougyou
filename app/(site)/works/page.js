@@ -1,17 +1,15 @@
-import { Cta, PageHead, WorkGrid } from '@/app/components/Parts';
-import { listPosts } from '@/app/lib/store';
+import { Cta, PageHead } from '@/app/components/Parts';
+import { WorksFeed } from '@/app/components/Posts';
 
 export const metadata = { title: '施工例' };
-export const dynamic = 'force-dynamic';
 
-export default async function WorksPage() {
-  const works = await listPosts({ type: 'work' });
+export default function WorksPage() {
   return (
     <main>
       <PageHead en="WORKS" title="施工例" image="/img/gen-truck.jpg" />
       <section className="section">
         <div className="wrap">
-          <WorkGrid posts={works} />
+          <WorksFeed />
         </div>
       </section>
       <Cta />

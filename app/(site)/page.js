@@ -1,16 +1,9 @@
 import Link from 'next/link';
-import { Cta, NewsList, SecHead, WorkGrid } from '@/app/components/Parts';
+import { Cta, SecHead } from '@/app/components/Parts';
+import { NewsFeed, WorksFeed } from '@/app/components/Posts';
 import { businessClosing, businessDetails, businessIntro, flow, services } from '@/app/lib/content';
-import { listPosts } from '@/app/lib/store';
 
-export const dynamic = 'force-dynamic';
-
-export default async function Home() {
-  const [works, news] = await Promise.all([
-    listPosts({ type: 'work', limit: 3 }),
-    listPosts({ type: 'news', limit: 4 }),
-  ]);
-
+export default function Home() {
   return (
     <main className="home">
       <section className="hero">
@@ -58,7 +51,7 @@ export default async function Home() {
               お知らせ一覧
             </Link>
           </div>
-          <NewsList posts={news} />
+          <NewsFeed limit={4} />
         </div>
       </section>
 
@@ -131,7 +124,7 @@ export default async function Home() {
               施工例をもっと見る
             </Link>
           </div>
-          <WorkGrid posts={works} />
+          <WorksFeed limit={3} />
         </div>
       </section>
 

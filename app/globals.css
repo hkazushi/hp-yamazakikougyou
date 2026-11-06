@@ -388,6 +388,7 @@ main.home { padding-top: 0; }
 .a-item strong { display: block; font-size: 15px; }
 .a-item small { color: #66676b; font-size: 12px; }
 .a-draft { margin-left: 8px; padding: 1px 7px; background: #e6e0cf; color: #5d4d1f; font-size: 11px; }
+.a-review { margin-bottom: 16px; padding: 10px 14px; border-left: 4px solid #a8842f; background: #f6efdc; color: #4d3f17; font-size: 14px; line-height: 1.7; }
 .a-empty { padding: 44px 16px; border: 1px dashed #bcbcb6; color: #66676b; text-align: center; }
 .a-card { padding: clamp(16px, 3vw, 28px); border: 1px solid #dcdcd7; border-radius: 4px; background: #fff; }
 .a-field { display: block; margin-bottom: 20px; }
