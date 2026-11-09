@@ -71,12 +71,12 @@ export default function Home() {
               <SecHead en="OUR BUSINESS" title="事業内容" />
               <p className="lead">{businessIntro}</p>
             </div>
-            <img className="reveal" src="/img/gen-sorting.jpg" alt="材質ごとに分別された廃材（イメージ）" loading="lazy" />
+            <img className="reveal" src="/img/photo-room.jpg" alt="内装解体後のマンションの室内" loading="lazy" />
           </div>
           <ul className="service-cards">
             {services.map((s) => (
               <li key={s.title}>
-                <img src={s.image} alt={`${s.title}（イメージ）`} loading="lazy" />
+                <img src={s.image} alt={s.title} loading="lazy" />
                 <div>
                   <small>{s.en}</small>
                   <strong>{s.title}</strong>

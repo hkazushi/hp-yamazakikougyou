@@ -38,10 +38,10 @@ export const businessIntro =
   '株式会社山﨑工業では、内装解体工事を中心として原状回復工事、スケルトン工事、部分改修工事、斫り工事、石綿関連工事まで幅広く対応しております。';
 
 export const services = [
-  { title: '内装解体工事', en: 'INTERIOR DEMOLITION', image: '/img/gen-svc-interior.jpg' },
-  { title: '原状回復工事', en: 'RESTORATION', image: '/img/gen-svc-restore.jpg' },
-  { title: 'スケルトン工事', en: 'SKELETON', image: '/img/gen-svc-skeleton.jpg' },
-  { title: '部分改修工事', en: 'PARTIAL RENOVATION', image: '/img/gen-svc-partial.jpg' },
+  { title: '内装解体工事', en: 'INTERIOR DEMOLITION', image: '/img/photo-interior.jpg' },
+  { title: '原状回復工事', en: 'RESTORATION', image: '/img/photo-restore.jpg' },
+  { title: 'スケルトン工事', en: 'SKELETON', image: '/img/photo-skeleton.jpg' },
+  { title: '部分改修工事', en: 'PARTIAL RENOVATION', image: '/img/photo-partial.jpg' },
   { title: '斫り工事', en: 'CHIPPING', image: '/img/gen-chisel.jpg' },
   { title: '石綿関連工事', en: 'ASBESTOS', image: '/img/gen-svc-asbestos.jpg' },
 ];

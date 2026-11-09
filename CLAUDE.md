@@ -90,10 +90,10 @@ docker run --rm php:8.3-cli php -r 'echo password_hash("ここにパスワード
 
 - 色は `:root` の変数のみ。見出しは明朝（ロゴに合わせる）、本文はゴシック。角丸、影は公開側で使わない
 - ロゴは PDF 内の JPEG をトレースした SVG。`public/img/logo-*.svg`（白 / 黒、マーク / 社名 / 縦組み）
-- 写真は支給の5枚（`site-*` `worker-*` `back`）と、Gemini で生成した `gen-*`。フリー素材は使わない（出典・用途は `notes/content-sources.md`）
+- 写真は支給分（`site-*` `worker-*` `back` `photo-*`）と、Gemini で生成した `gen-*`。**支給写真が届いたら AI 画像を置き換える**（2026-11-09 の指示）。フリー素材は使わない（出典・用途は `notes/content-sources.md`）
 - **同じ画像をサイト内の複数箇所で使わない**（ユーザー指定。施工例がトップと一覧に出るのは同じ投稿なので例外）。共通パーツ（`Cta`）に写真を入れると全ページで重複するので入れない
 - 会社の強みは写真を画面端まで大きく出し、CSS で全てモノクロに統一する
-- トップは動画（`public/video/hero.mp4`）。生成画像3枚を ffmpeg でズームさせたもので、実動画が届けば差し替える
+- トップは動画（`public/video/hero.mp4`）。2026-11-09 に支給の動画（東京の夜景）へ差し替え済み
 - 画像を追加生成するときは `.env.local` の `GEN_API_KEY`（Gemini。`gemini-3-pro-image` の 2K が綺麗。Veo は使えない）。スクリプトは残していないので、その都度書く
 - 事業内容と代表メッセージは独立ページにしない（通話で決定。`meetings/2026-11-06.md`）
 
