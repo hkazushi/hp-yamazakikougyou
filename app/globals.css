@@ -176,6 +176,8 @@ main.home { padding-top: 0; }
 
 /* 下層ヘッダー */
 .page-head { position: relative; display: flex; align-items: flex-end; min-height: clamp(240px, 34vw, 400px); overflow: hidden; isolation: isolate; }
+/* 写真を見せたいページ用（帽子の文字と襟のロゴを両方入れる） */
+.page-head.tall { min-height: clamp(320px, 42vw, 600px); }
 .page-head img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
 .page-head::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, var(--black) 0, rgba(11, 11, 12, 0.58) 70%); }
 .page-head .wrap { padding-block: 40px; }
