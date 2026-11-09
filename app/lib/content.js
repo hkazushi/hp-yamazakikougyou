@@ -99,7 +99,7 @@ export const strengths = [
   },
   {
     no: '03',
-    image: { src: '/img/back.jpg', alt: '社名ロゴ入りの作業着', position: '50% 45%' },
+    image: { src: '/img/gen-recruit.jpg', alt: '現場で街を見渡す職人（イメージ）', position: '30% 40%' },
     title: '感じの良い職人と、チームワークのある施工体制',
     short: '挨拶は明るく、はっきりと。職長を中心に一丸となって工事を進めます。',
     body: [

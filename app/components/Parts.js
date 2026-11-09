@@ -3,10 +3,10 @@ import Slider from './Slider';
 
 export const formatDate = (d) => String(d).replaceAll('-', '.');
 
-export function PageHead({ en, title, image }) {
+export function PageHead({ en, title, image, position }) {
   return (
     <section className="page-head">
-      <img src={image} alt="" />
+      <img src={image} alt="" style={position ? { objectPosition: position } : undefined} />
       <div className="wrap">
         <span className="eyebrow">{en}</span>
         <h1>{title}</h1>

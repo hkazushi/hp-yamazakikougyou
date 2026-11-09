@@ -10,7 +10,7 @@ export const metadata = {
 export default function RecruitPage() {
   return (
     <main>
-      <PageHead en="RECRUIT" title="求人情報" image="/img/gen-recruit.jpg" />
+      <PageHead en="RECRUIT" title="求人情報" image="/img/back.jpg" position="50% 38%" />
       <section className="section">
         <div className="narrow">
           <SecHead en="JOB DESCRIPTION" title="解体工 募集要項" />
