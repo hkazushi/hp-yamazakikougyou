@@ -42,8 +42,8 @@ export const services = [
   { title: '原状回復工事', en: 'RESTORATION', image: '/img/photo-restore.jpg' },
   { title: 'スケルトン工事', en: 'SKELETON', image: '/img/photo-skeleton.jpg' },
   { title: '部分改修工事', en: 'PARTIAL RENOVATION', image: '/img/photo-partial.jpg' },
-  { title: '斫り工事', en: 'CHIPPING', image: '/img/gen-chisel.jpg' },
-  { title: '石綿関連工事', en: 'ASBESTOS', image: '/img/gen-svc-asbestos.jpg' },
+  { title: '斫り工事', en: 'CHIPPING', image: '/img/photo-chipping.jpg' },
+  { title: '石綿関連工事', en: 'ASBESTOS', image: '/img/photo-asbestos.jpg' },
 ];
 
 // 原稿「安全管理と細かな現場報告」から
